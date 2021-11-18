@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { Context } from "./context/Context";
 import Home from "./pages/Home/Home";
 import TopBar from "./components/TopBar/TopBar";
 import Single from "./pages/Single/Single";
@@ -13,7 +15,7 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const user = false;
+  const { user } = useContext(Context);
 
   return (
     <>      
