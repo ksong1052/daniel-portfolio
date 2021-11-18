@@ -1,33 +1,45 @@
+import { useEffect, useState } from "react";
 import './postDetail.css';
-import NatureDetail from '../../images/nature3.jpg';
+import { useLocation } from 'react-router';
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const PostDetail = () => {
+  const location = useLocation();
+  const path = location.pathname.split("/")[2];
+  const [post, setPost] = useState({});
+
+  useEffect(() => {
+    const getPost = async () => {
+      const res = await axios.get("/posts/" + path);
+      setPost(res.data);
+    }
+    getPost();
+  }, [path])
+
   return (
     <div className="postDetail">
       <div className="postDetailWrapper">
-        <img src={NatureDetail} alt="" className="postDetailImg" />
+        { post.photo && (
+          <img src={post.photo} alt="" className="postDetailImg" />
+        )}
         <h1 className="postDetailTitle">
-          Lorem ipsum dolor
+          {post.title}
           <div className="postDetailEdit">
             <i className="postDetailIcon far fa-edit"></i>
             <i className="postDetailIcon far fa-trash-alt"></i>
           </div>
         </h1>
         <div className="postDetailInfo">
-          <span className="postDetailAuthor">Author: <b>Daniel</b></span>
-          <span className="postDetailDate">1 hour ago</span>
+          <span className="postDetailAuthor">Author: 
+            <Link to={`/?user=${post.username}`} className="link">
+              <b>{post.username}</b>
+            </Link>
+          </span>
+          <span className="postDetailDate">{new Date(post.createAt).toDateString()}</span>
         </div>
         <p className="postDetailDesc">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-          Non delectus commodi quod iste quaerat eius deserunt tenetur sint? 
-          Autem, voluptas. Iste officia molestias modi dicta veritatis dolor. 
-          Quia, autem non? Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-          Non delectus commodi quod iste quaerat eius deserunt tenetur sint? 
-          Autem, voluptas. Iste officia molestias modi dicta veritatis dolor. 
-          Quia, autem non? Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-          Non delectus commodi quod iste quaerat eius deserunt tenetur sint? 
-          Autem, voluptas. Iste officia molestias modi dicta veritatis dolor. 
-          Quia, autem non?
+          {post.desc}
         </p>
       </div>
     </div>
