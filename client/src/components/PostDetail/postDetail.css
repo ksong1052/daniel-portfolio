@@ -6,6 +6,8 @@
   width: 100%;
   padding: 20px;
   padding-right: 0;  
+  display: flex;
+  flex-direction: column;
 }
 
 .postDetailImg {
@@ -17,8 +19,23 @@
 
 .postDetailTitle {
   text-align: center;
+  margin: 10px;
   font-family: "Lora", serif;
   font-size: 28px;
+}
+
+.postDetailTitleEdit {
+  text-align: center;
+  margin-top: 10px;
+  font-family: "Lora", serif;
+  font-size: 28px;
+  border: none;
+  color: gray;
+  border-bottom: 1px solid lightgray;
+}
+
+.postDetailTitleEdit:focus {
+  outline:none;
 }
 
 .postDetailEdit {
@@ -59,4 +76,31 @@
   margin-left: 20px;
   font-size: 30px;
   font-weight: 600;
+}
+
+.postDetailDescEdit {
+  color: gray;
+  font-size: 18px;
+  line-height: 30px;
+  border: none;
+}
+  
+.postDetailDescEdit:focus {
+  outline:none;
+}
+
+.postDetailButtonGroup {
+  align-self: flex-end;
+}
+
+.postDetailButton {
+  border: noen;
+  background-color: teal;
+  width: 100px;
+  padding: 5px;
+  margin-left: 5px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;  
+  margin-top: 20px;
 }

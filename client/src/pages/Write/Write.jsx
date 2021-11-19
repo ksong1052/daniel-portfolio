@@ -26,16 +26,24 @@ const Write = () => {
       data.append("file", file);
       newPost.photo = filename;
       try {
+        // Uploadinig image to static folder named "images"
         await axios.post("/upload", data);
       } catch(err) {}
     }
 
     try{
+      // Saving image information to DB
       const res = await axios.post("/posts", newPost);
+      // Redirect to PostDetail component
       window.location.replace("/post/"+res.data._id);
     } catch(err) {}
   };
 
+  /* 
+    URL.createObjectURL : 주어진 객체(File, Blob, MediaSource객체)를 가리키는 URL을 DOMString으로 반환합니다. 
+    생성한 값은 현재 창이나, 객체를 생성한 문서 내에서만 유효하다.
+    예: const objectURL = URL.createObjectURL(object)
+  */
   return (
     <div className="write">
       { file && (
