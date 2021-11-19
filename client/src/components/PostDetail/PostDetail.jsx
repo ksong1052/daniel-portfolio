@@ -17,11 +17,13 @@ const PostDetail = () => {
     getPost();
   }, [path])
 
+  const imageurl = "http://localhost:5000/images/";
+
   return (
     <div className="postDetail">
       <div className="postDetailWrapper">
         { post.photo && (
-          <img src={post.photo} alt="" className="postDetailImg" />
+          <img src={imageurl+post.photo} alt="" className="postDetailImg" />          
         )}
         <h1 className="postDetailTitle">
           {post.title}
@@ -36,8 +38,8 @@ const PostDetail = () => {
               <b>{post.username}</b>
             </Link>
           </span>
-          <span className="postDetailDate">{new Date(post.createAt).toDateString()}</span>
-        </div>
+          <span className="postDetailDate">{new Date(post.createdAt).toDateString()}</span>
+        </div>                             
         <p className="postDetailDesc">
           {post.desc}
         </p>

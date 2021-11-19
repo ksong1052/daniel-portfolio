@@ -8,11 +8,15 @@ const userRoute = require("./routes/users");
 const postRoute = require("./routes/posts");
 const categoryRoute = require("./routes/categories");
 const multer = require("multer");
+const path = require("path");
 
 dotenv.config();
 
 /* Handling Json Data in Node */
 app.use(express.json());
+
+/* Configuring static folder */
+app.use("/images", express.static(path.join(__dirname,"/images")));
 
 /* MongoDB Connection */
 mongoose.connect(process.env.MONGO_URL, {
