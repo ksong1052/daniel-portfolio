@@ -6,6 +6,11 @@ import { Link } from "react-router-dom";
 const TopBar = () => {
   const { user, dispatch } = useContext(Context);
 
+   const imageUrl = "http://localhost:5000/images/";
+
+  // console.log("user: ", user);
+  // console.log("imageUrl + user.profilePic: ",imageUrl + user.profilePic);
+
   const logoutHandler = () => {
     dispatch({ type: "LOGOUT" });
   };
@@ -34,7 +39,22 @@ const TopBar = () => {
       <div className="topRight">
         {
           user ? (
-            <img src={user.profilePic} alt="" className="topImg" />
+            <>
+              <span style={{marginRight:"10px"}}>Welcome, <b>{user.username}</b></span>
+              <Link to="/settings">
+                {/* <img 
+                  src={user.profilePic}
+                  alt="" 
+                  className="topImg" 
+                /> */}
+                <img 
+                  src={imageUrl + user.profilePic}
+                  alt="" 
+                  className="topImg" 
+                  />
+              </Link>              
+            </>
+            
           ) : (
             <ul className="topList">
               <li className="topListItem">
@@ -50,7 +70,7 @@ const TopBar = () => {
             </ul>
           )
         }
-        <i className="topSearchIcon fas fa-search"></i>       
+        {/* <i className="topSearchIcon fas fa-search"></i>        */}
       </div>
     </div>
   )

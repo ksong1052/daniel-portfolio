@@ -69,13 +69,17 @@
   border-bottom: 1px solid lightcoral;
 }
 
+.settingsSubmitGroup {
+  align-self: center;
+}
+
 .settingsSubmit {
-   width: 150px;
-   align-self: center;
+   width: 150px;   
    border: none;
    border-radius: 10px;
    color: white;
    background-color: teal;
    padding: 10px;
    cursor: pointer;
+   margin-right: 5px;
 }
