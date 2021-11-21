@@ -5,7 +5,7 @@ import { Context } from '../../context/Context';
 import axios from 'axios';
 
 const Settings = () => {
-  const { user } = useContext(Context);
+  const { user, dispatch } = useContext(Context);
 
   const [file, setFile] = useState(null); 
   const [username, setUsername] = useState("");
@@ -29,7 +29,9 @@ const Settings = () => {
 
   /* 🌟 Important🌟 Uplading image */
   const settingsSubmitHandler = async (e) => {
-    e.preventDefault();    
+    e.preventDefault();  
+
+    dispatch({ type: "UPDATE_START" });
 
     const updatedUser = {
       userId: user._id,
@@ -46,13 +48,16 @@ const Settings = () => {
       try {
         // Uploadinig image to static folder named "images"
         await axios.post("/upload", data);        
-      } catch(err) {}
+      } catch(err) {
+        console.log("Something wrong with uploading image..!!");
+      }
     }
 
     try{
       // Modified user information and Save it to DB
       const res = await axios.put("/users/" + user._id, updatedUser);   
-      if(res.data) {
+      if(res.data) {        
+        dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
         alert("Profile has been updated...!!");
 
         window.location.replace("/settings");
@@ -60,13 +65,14 @@ const Settings = () => {
         setUpdateMode(false);
       } else { console.log("Something wrong with updating profile..!!");}
             
-    } catch(err) {}
+    } catch(err) {
+      dispatch({ type: "UPDATE_FAILURE" });
+    }
   };
 
   const updateHandler = (e) => {
     e.preventDefault();    
-    setUpdateMode(true);
-    
+    setUpdateMode(true);    
   }
 
   const cancelHandler = (e) => {
@@ -106,14 +112,6 @@ const Settings = () => {
                     className="settingsImg" 
                   />                
                 } 
-
-                {/* { file && (
-                  <img 
-                    src={URL.createObjectURL(file)} 
-                    alt="" 
-                    className="settingsImg" 
-                  />
-                )} */}
                 <label htmlFor="fileInput">
                   <i className="settingsPPIcon far fa-user-circle"></i>
                 </label>

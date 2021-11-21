@@ -9,7 +9,7 @@ const TopBar = () => {
    const imageUrl = "http://localhost:5000/images/";
 
   // console.log("user: ", user);
-  // console.log("imageUrl + user.profilePic: ",imageUrl + user.profilePic);
+  // console.log("imageUrl + user.profilePic: ",imageUrl + user.profilePic); 
 
   const logoutHandler = () => {
     dispatch({ type: "LOGOUT" });
