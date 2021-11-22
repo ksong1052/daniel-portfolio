@@ -61,19 +61,20 @@ router.post("/register", async (req, res) => {
 
 // login
 router.post("/login", async (req, res) => {
-  try {
+  try {    
     const user = await User.findOne({username: req.body.username});
     !user && res.status(400).json("There is no user you are looking for..!");
 
-    const validate = await bcrypt.compare(req.body.password, user.password);
-    !validate && res.status(400).json("Wrong Password...!") ;
+    const authPassword = await bcrypt.compare(req.body.password, user.password);
+    !authPassword && res.status(400).json("Wrong Password...!") ;
 
     // Only getting user information except for Password
     const { password, ...others } = user._doc;
-    res.status(200).json(others);
+    res.status(200).json(others); 
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 
 module.exports = router;
