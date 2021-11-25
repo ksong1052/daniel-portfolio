@@ -14,12 +14,19 @@ const Login = () => {
     e.preventDefault();
 
     dispatch({ type: "LOGIN_START" });
-    try {
+    try {      
       const res = await axios.post("/auth/login", {
         username: usernameRef.current.value,
         password: passwordRef.current.value,
       });
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+
+      // ⭐ Important ⭐ : 기존 token을 사용하지 않을 때
+      //dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+
+      // ⭐ Important ⭐ : Token을 사용할 때, server로 부터 others & token을 받아 온다.
+      console.log("res.data.others:", res.data.others);
+      console.log("res.data.token:", res.data.token);
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.others });      
     } catch(err) {
       dispatch({ type: "LOGIN_FAILURE" });
     }

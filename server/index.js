@@ -10,6 +10,7 @@ const categoryRoute = require("./routes/categories");
 const multer = require("multer");
 const path = require("path");
 
+// .env에 저장해 놓은 환경변수 값를 가져 올 수 있다.
 dotenv.config();
 
 /* Handling Json Data in Node */
