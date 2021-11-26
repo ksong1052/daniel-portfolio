@@ -1,62 +1,48 @@
 const router = require("express").Router();
-const User = require("../models/User");
-const bcrypt = require("bcrypt");
+require('express-async-errors');
+const { body } = require('express-validator');
+const validate = require('../middleware/validator');
 
-// Configuring bcrypt
-const jwt = require('jsonwebtoken');
-const jwtSecretKey = "mySecretKey!23";
-const jwtExpiresInDays = "2d";
-const bcryptSaltRounds = 12;
+const authController = require('../costroller/auth');
+
+const validateCredential = [
+  body('username')
+    .trim()
+    .notEmpty()
+    .withMessage('username is required')
+    .isLength({min:5})
+    .withMessage('username should be at least 5 characters'),
+  body('password')
+    .trim()
+    .notEmpty()
+    .withMessage('password is required')
+    .isStrongPassword({
+      minLength: 8,
+      minUppercase: 1,
+      minSymbols: 1,
+      minNumbers: 1
+    })
+    .withMessage('"Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, and one number"'),
+  validate
+];
+
+const validateSignup = [
+  ...validateCredential,
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('invalid email'),  
+  validate
+];
 
 // Register
-router.post("/register", async (req, res) => {
-  try {
-
-    /* Bcrypt configuration */
-    // 🌟 중요 🌟 bcrypt에서 password를 넘길 때는 String 타입이어야 한다.
-    const salt = await bcrypt.genSalt(10);
-    const password = req.body.password;
-    const hashedPass = await bcrypt.hash(password, salt);    
-
-    // Getting the new user information
-    const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: hashedPass,
-    });
-
-    // Sending the new saved user to Web
-    const user = await newUser.save();
-    res.status(200).json(user);
-        
-  } catch(err) {
-    res.status(500).json(err);
-  }
-});
-
+router.post("/register", validateSignup, authController.register);
 
 // login
-router.post("/login", async (req, res) => {
-  try {    
-    const user = await User.findOne({username: req.body.username});
-    !user && res.status(400).json("There is no user you are looking for..!");
-
-    const authPassword = await bcrypt.compare(req.body.password, user.password);
-    !authPassword && res.status(400).json("Wrong Password...!") ;
-
-    // ⭐ Important ⭐ : Only getting user information except for Password
-    // const { password, ...others } = user._doc; 
-    // res.status(200).json(others); 
-
-    // ⭐ User information except for Password & Generating User Token  
-    // 필요한 data를 객체에 담아 보낸다. Client에서는 두개의 정보를 따로 받아 볼 수 있다.
-    const { password, ...others } = user._doc;    
-    const token = createJwtToken(others._id);    
-    res.status(201).json({ token, others });    
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+router.post("/login", validateCredential, authController.login);
 
 function createJwtToken(id) {
   return jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtExpiresInDays });
